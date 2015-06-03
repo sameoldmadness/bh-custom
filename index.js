@@ -12,21 +12,18 @@ var syntax = esprima.parse(code, { raw: true, tokens: true, range: true, comment
 syntax = escodegen.attachComments(syntax, syntax.comments, syntax.tokens);
 
 // transform tree
-var utilsNode = syntax.body[0].declarations[0].init.callee.body.body[1].body.body[11];
+var walker = require('./src/astWalker')(syntax);
 
-var helpersToStrip = ['isSimple', 'position', 'isFirst', 'isLast', 'process',
-                      'generateId', 'mod', 'attr', 'bem', 'cls', 'json'];
-var helpers = utilsNode.expression.right.properties;
-
-helpers.forEach(function (method, index) {
-	var name = method.key.name;
-
-	if (helpersToStrip.indexOf(name) !== -1) {
-		delete helpers[index];
-	}
-});
-
-utilsNode.expression.right.properties = helpers.filter(Boolean);
+walker.modules();
+walker.positioning();
+walker.sugar();
+walker.infrequent();
+walker.js();
+walker.mix();
+walker.matchers();
+walker.recursionCheck();
+walker.options();
+walker.generate();
 // end transformations
 
 // write('./ast-comments.json', JSON.stringify(syntax));
