@@ -135,7 +135,7 @@ code = escodegen.generate(syntax, {
     }
 });
 
-write('./dist/bh-tiny.js', code);
+write('./dist/bh.js', code);
 
 });
 

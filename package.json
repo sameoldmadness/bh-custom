@@ -1,11 +1,8 @@
 {
-  "name": "bh-tiny",
+  "name": "bh-custom",
   "version": "0.0.1",
-  "description": "bh for embedded systems",
-  "main": "dist/bh-tiny.js",
-  "scripts": {
-    "build": "node index"
-  },
+  "description": "BH custom builder",
+  "main": "dist/bh.js",
   "author": "Roman Paradeev <sameoldmadness@gmail.com> (http://github.com/sameoldmadness)",
   "license": "MIT",
   "devDependencies": {
