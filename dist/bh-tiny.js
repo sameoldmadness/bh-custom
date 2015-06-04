@@ -8,10 +8,36 @@ var BH = function () {
     this._optJsAttrIsJs = true;
     this._optJsCls = 'i-bem';
     this._optJsElem = true;
-    this._optEscapeContent = false;
+    this._optEscapeContent = true;
     this._optNobaseMods = false;
   }
   BH.prototype = {
+    /**
+     * Объявляет глобальный шаблон, применяемый перед остальными.
+     * ```javascript
+     * bh.beforeEach(function(ctx, json) {
+     *     ctx.attr('onclick', json.counter);
+     * });
+     * ```
+     * @param {Function} matcher
+     * @returns {BH}
+     */
+    beforeEach: function (matcher) {
+      return this.match('$before', matcher);
+    },
+    /**
+     * Объявляет глобальный шаблон, применяемый после остальных.
+     * ```javascript
+     * bh.afterEach(function(ctx) {
+     *     ctx.tag('xdiv');
+     * });
+     * ```
+     * @param {Function} matcher
+     * @returns {BH}
+     */
+    afterEach: function (matcher) {
+      return this.match('$after', matcher);
+    },
     /**
      * Превращает раскрытый BEMJSON в HTML.
      * @param {BemJson} json

@@ -2,15 +2,16 @@
   "name": "bh-tiny",
   "version": "0.0.1",
   "description": "bh for embedded systems",
-  "main": "index.js",
+  "main": "dist/bh-tiny.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node index"
   },
   "author": "Roman Paradeev <sameoldmadness@gmail.com> (http://github.com/sameoldmadness)",
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "bh": "^4.1.0",
     "escodegen": "^1.6.1",
-    "esprima": "^2.2.0"
+    "esprima": "^2.2.0",
+    "inquirer": "^0.8.5"
   }
 }

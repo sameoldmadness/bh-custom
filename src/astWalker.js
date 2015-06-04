@@ -69,7 +69,27 @@ module.exports = function (tree) {
 
 		protoProperties: function () {
 			return get.proto().expression.right.properties;
-		}	
+		},
+
+		protoProperty: function (name) {
+			var result;
+
+			get.protoProperties().some(function (node) {
+				if (node.key.name === name) {
+					result = node;
+
+					return true;
+				}
+			});
+
+			return result;
+		},
+
+		processBemJson: function () {
+			var prop = get.protoProperty('processBemJson');
+
+			return prop ? prop.value.body.body : [];
+		}
 	};
 
 	var del = {
@@ -139,6 +159,25 @@ module.exports = function (tree) {
 
 		moduleWrapper: function () {
 			get.root().splice(1,1);
+		},
+
+		processBemJsonVariables: function (names) {
+			var nodes = get.processBemJson();
+			var indexesToStrip = [];
+
+			nodes.forEach(function (node, index) {
+				if (node.type !== 'VariableDeclaration') {
+					return;
+				}
+
+				if (names.indexOf(node.declarations[0].id.name) !== -1) {
+					indexesToStrip.push(index);
+				}
+			});
+
+			indexesToStrip.reverse().forEach(function (index) {
+				nodes.splice(index, 1);
+			});
 		}
 	};
 
@@ -173,7 +212,6 @@ module.exports = function (tree) {
 
 		mix: function () {
 			del.utilsProperties(['mix']);
-			console.info('[wip] mix');
 		},
 
 		matchers: function () {
@@ -184,13 +222,21 @@ module.exports = function (tree) {
 		recursionCheck: function () {
 			del.constructorProperty(['_infiniteLoopDetection']);
 			del.protoProperties(['enableInfiniteLoopDetection']);
-			console.info('[wip] recursionCheck');
+			del.processBemJsonVariables(['infiniteLoopDetection']);
 		},
 
-		options: function () {
+		options: function (options) {
 			del.constructorProperty(['_options']);
 			del.protoProperties(['setOptions', 'getOptions']);
-			console.info('[wip] options');
+
+			Object.keys(options).forEach(function (option) {
+				var property = '_opt' + option.slice(0, 1).toUpperCase() + option.slice(1);
+				var node = get.constructorProperty(property);
+				var value = options[option];
+
+				node.expression.right.value = value;
+				node.expression.right.raw = JSON.stringify(value);
+			});
 		}
 	}
 };
