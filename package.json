@@ -13,6 +13,14 @@
     "bh": "^4.1.0",
     "escodegen": "^1.6.1",
     "esprima": "^2.2.0",
-    "inquirer": "^0.10.1"
+    "inquirer": "^0.10.1",
+    "mocha": "^2.3.3",
+    "chai": "^3.3.0",
+    "istanbul": "^0.3.22"
+  },
+  "scripts": {
+    "test": "npm run-script unit-test-coverage",
+    "unit-test": "mocha -u bdd -R spec --recursive test",
+    "unit-test-coverage": "istanbul cover _mocha -- -u bdd -R spec --recursive test"
   }
 }
