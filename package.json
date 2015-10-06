@@ -5,10 +5,14 @@
   "main": "dist/bh.js",
   "author": "Roman Paradeev <sameoldmadness@gmail.com> (http://github.com/sameoldmadness)",
   "license": "MIT",
+  "repository" : {
+    "type" : "git",
+    "url" : "git+https://github.com/sameoldmadness/bh-custom.git"
+  },
   "devDependencies": {
     "bh": "^4.1.0",
     "escodegen": "^1.6.1",
     "esprima": "^2.2.0",
-    "inquirer": "^0.8.5"
+    "inquirer": "^0.10.1"
   }
 }
