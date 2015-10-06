@@ -1,6 +1,6 @@
 {
   "name": "bh-custom",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "BH custom builder",
   "main": "dist/bh.js",
   "author": "Roman Paradeev <sameoldmadness@gmail.com> (http://github.com/sameoldmadness)",
