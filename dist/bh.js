@@ -163,3 +163,7 @@ var BH = function () {
   };
   return BH;
 }();
+/* istanbul ignore else */
+if (typeof module !== 'undefined') {
+  module.exports = BH;
+}

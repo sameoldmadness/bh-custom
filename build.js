@@ -32,7 +32,7 @@ inquirer.prompt([
     message: "Chose Presets",
     name: "presets",
     choices: [
-      { name: 'modules', checked: true },
+      { name: 'modules', checked: false },
       { name: 'positioning', checked: true },
       { name: 'sugar', checked: true },
       { name: 'infrequent', checked: true },
