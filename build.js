@@ -73,7 +73,7 @@ inquirer.prompt([
     type: 'input',
     name: 'jsElem',
     message: 'Set jsElem',
-    default: 'true',
+    default: 'false',
     when: whenOptions,
     validate: bool,
     filter: toBool

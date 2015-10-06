@@ -2,6 +2,22 @@ var BH = require('../dist/bh');
 require('chai').should();
 
 describe('bh.toHtml()', function() {
+    describe('json.toHtml', function() {
+        var bh;
+        beforeEach(function() {
+            bh = new BH();
+        });
+
+        it('should redefine `toHtml` method for only node', function() {
+            function toHtml(json) {return '<!DOCTYPE ' + json.mods.type + '>'; }
+
+            bh.toHtml([
+                { block: 'doctype', mods: { type: 'html' }, toHtml: toHtml },
+                { block: 'page' }
+            ]).should.equal('<!DOCTYPE html><div class="page"></div>');
+        });
+    });
+
     describe('content', function() {
         var bh;
         beforeEach(function() {
@@ -90,6 +106,9 @@ describe('bh.toHtml()', function() {
         it('should return html tag <span>', function() {
             bh.toHtml({ tag: 'span' }).should.equal('<span></span>');
         });
+        it('should return short tag <br>', function() {
+            bh.toHtml({ tag: 'br' }).should.equal('<br/>');
+        });
         it('should return content when `tag` is empty', function() {
             bh.toHtml({ tag: false, content: 'label' }).should.equal('label');
         });
@@ -117,6 +136,11 @@ describe('bh.toHtml()', function() {
                 content: 'link'
             }).should.equal(
                 '<a href="<script type=&quot;javascript&quot;>window &amp;&amp; alert(document.cookie)</script>">link</a>');
+        });
+        it('should add boolean attrs', function() {
+            bh.toHtml({ block: 'button', attrs: { disabled: true } }).should.equal(
+                '<div class="button" disabled></div>'
+            );
         });
     });
 
@@ -209,13 +233,9 @@ describe('bh.toHtml()', function() {
         beforeEach(function() {
             bh = new BH();
         });
-        it('should set `i-bem` class on element', function() {
-            bh.toHtml({ block: 'button', elem: 'control', js: true, content: 'submit' }).should.equal(
-                '<div class="button__control i-bem" onclick=\'return {"button__control":{}}\'>submit</div>');
-        });
-        it('should set `i-bem` class on mixed element', function() {
-            bh.toHtml({ block: 'icon', content: 'submit', mix: { block: 'button', elem: 'control', js: true } }).should.equal(
-                '<div class="icon button__control i-bem" onclick=\'return {"button__control":{}}\'>submit</div>');
+        it('should set `i-bem` class on block', function() {
+            bh.toHtml({ block: 'button', js: true, content: 'submit' }).should.equal(
+                '<div class="button i-bem" onclick=\'return {"button":{}}\'>submit</div>');
         });
         it('should set `i-bem` class on mixed block', function() {
             bh.toHtml({ block: 'button', elem: 'box', content: 'submit', mix: { block: 'icon', js: true } }).should.equal(
