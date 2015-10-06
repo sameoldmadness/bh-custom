@@ -19,11 +19,11 @@ function attr(value) {
 }
 
 function toBool(value) {
-	return value === 'true';
+  return value === 'true';
 }
 
 function whenOptions(answers) {
-	return answers.presets.indexOf('options') !== -1;
+  return answers.presets.indexOf('options') !== -1;
 }
 
 inquirer.prompt([
@@ -41,60 +41,76 @@ inquirer.prompt([
       { name: 'mix', checked: true },
       { name: 'matchers', checked: true },
       { name: 'recursionCheck', checked: true },
-      { name: 'options', checked: true },
+      { name: 'options', checked: true }
     ]
   },
   {
-  	type: 'input',
-  	name: 'jsAttrName',
-  	message: 'Set jsAttrName',
-  	default: 'onclick',
-  	when: whenOptions,
-  	validate: attr
+    type: 'input',
+    name: 'jsAttrName',
+    message: 'Set jsAttrName',
+    default: 'onclick',
+    when: whenOptions,
+    validate: attr
   },
   {
-  	type: 'input',
-  	name: 'jsAttrIsJs',
-  	message: 'Set jsAttrIsJs',
-  	default: 'true',
-  	when: whenOptions,
-  	validate: bool,
-  	filter: toBool
+    type: 'input',
+    name: 'jsAttrIsJs',
+    message: 'Set jsAttrIsJs',
+    default: 'true',
+    when: whenOptions,
+    validate: bool,
+    filter: toBool
   },
   {
-  	type: 'input',
-  	name: 'jsCls',
-  	message: 'Set jsCls',
-  	default: 'i-bem',
-  	when: whenOptions,
-  	validate: attr
+    type: 'input',
+    name: 'jsCls',
+    message: 'Set jsCls',
+    default: 'i-bem',
+    when: whenOptions,
+    validate: attr
   },
   {
-  	type: 'input',
-  	name: 'jsElem',
-  	message: 'Set jsElem',
-  	default: 'true',
-  	when: whenOptions,
-  	validate: bool,
-  	filter: toBool
+    type: 'input',
+    name: 'jsElem',
+    message: 'Set jsElem',
+    default: 'true',
+    when: whenOptions,
+    validate: bool,
+    filter: toBool
   },
   {
-  	type: 'input',
-  	name: 'escapeContent',
-  	message: 'Set escapeContent',
-  	default: 'true',
-  	when: whenOptions,
-  	validate: bool,
-  	filter: toBool
+    type: 'input',
+    name: 'escapeContent',
+    message: 'Set escapeContent',
+    default: 'true',
+    when: whenOptions,
+    validate: bool,
+    filter: toBool
   },
   {
-  	type: 'input',
-  	name: 'nobaseMods',
-  	message: 'Set nobaseMods',
-  	default: 'false',
-  	when: whenOptions,
-  	validate: bool,
-  	filter: toBool
+    type: 'input',
+    name: 'nobaseMods',
+    message: 'Set nobaseMods',
+    default: 'false',
+    when: whenOptions,
+    validate: bool,
+    filter: toBool
+  },
+  {
+    type: 'input',
+    name: 'delimElem',
+    message: 'Set delimElem',
+    default: '__',
+    when: whenOptions,
+    validate: attr
+  },
+  {
+    type: 'input',
+    name: 'delimMod',
+    message: 'Set delimMod',
+    default: '_',
+    when: whenOptions,
+    validate: attr
   }
 ], function( answers ) {
 
@@ -119,7 +135,7 @@ var presets = answers.presets;
 delete answers.presets;
 
 presets.forEach(function (preset) {
-	walker[preset](answers);
+  walker[preset](answers);
 });
 // end transformations
 

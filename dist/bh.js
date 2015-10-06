@@ -4,12 +4,21 @@ var BH = function () {
  * @constructor
  */
   function BH() {
+    /**
+     * Оптимизация коротких тегов. Они могут быть расширены через setOptions({ shortTags: [...] })
+     */
+    this._shortTags = {};
+    for (var i = 0; i < SHORT_TAGS.length; i++) {
+      this._shortTags[SHORT_TAGS[i]] = 1;
+    }
     this._optJsAttrName = 'onclick';
     this._optJsAttrIsJs = true;
     this._optJsCls = 'i-bem';
     this._optJsElem = true;
     this._optEscapeContent = true;
     this._optNobaseMods = false;
+    this._optDelimElem = '__';
+    this._optDelimMod = '_';
   }
   BH.prototype = {
     /**
@@ -72,9 +81,9 @@ var BH = function () {
           }
         }
         if (isBEM) {
-          var base = json.block + (json.elem ? '__' + json.elem : '');
+          var base = json.block + (json.elem ? this._optDelimElem + json.elem : '');
           if (json.block) {
-            cls = toBemCssClasses(json, base, null, this._optNobaseMods);
+            cls = toBemCssClasses(json, base, null, this._optNobaseMods, this._optDelimMod);
             if (json.js) {
               (jsParams = {})[base] = json.js === true ? {} : json.js;
             }
@@ -85,9 +94,9 @@ var BH = function () {
             for (i = 0, l = mixes.length; i < l; i++) {
               var mix = mixes[i];
               if (mix && mix.bem !== false) {
-                var mixBlock = mix.block || json.block || '', mixElem = mix.elem || (mix.block ? null : json.block && json.elem), mixBase = mixBlock + (mixElem ? '__' + mixElem : '');
+                var mixBlock = mix.block || json.block || '', mixElem = mix.elem || (mix.block ? null : json.block && json.elem), mixBase = mixBlock + (mixElem ? this._optDelimElem + mixElem : '');
                 if (mixBlock) {
-                  cls += toBemCssClasses(mix, mixBase, base, this._optNobaseMods);
+                  cls += toBemCssClasses(mix, mixBase, base, this._optNobaseMods, this._optDelimMod);
                   if (mix.js) {
                     (jsParams = jsParams || {})[mixBase] = mix.js === true ? {} : mix.js;
                     hasMixJsParams = true;
@@ -111,7 +120,7 @@ var BH = function () {
         }
         var tag = json.tag || 'div';
         this._buf += '<' + tag + (cls ? ' class="' + cls + '"' : '') + (attrs ? attrs : '');
-        if (selfCloseHtmlTags[tag]) {
+        if (this._shortTags[tag]) {
           this._buf += '/>';
         } else {
           this._buf += '>';
@@ -125,25 +134,7 @@ var BH = function () {
       }
     }
   };
-  var selfCloseHtmlTags = {
-    area: 1,
-    base: 1,
-    br: 1,
-    col: 1,
-    command: 1,
-    embed: 1,
-    hr: 1,
-    img: 1,
-    input: 1,
-    keygen: 1,
-    link: 1,
-    menuitem: 1,
-    meta: 1,
-    param: 1,
-    source: 1,
-    track: 1,
-    wbr: 1
-  };
+  var SHORT_TAGS = 'area base br col command embed hr img input keygen link menuitem meta param source track wbr'.split(' ');
   var xmlEscape = BH.prototype.xmlEscape = function (str) {
     return (str + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   };
@@ -153,7 +144,7 @@ var BH = function () {
   var jsAttrEscape = BH.prototype.jsAttrEscape = function (str) {
     return (str + '').replace(/&/g, '&amp;').replace(/'/g, '&#39;');
   };
-  var toBemCssClasses = function (json, base, parentBase, nobase) {
+  var toBemCssClasses = function (json, base, parentBase, nobase, delimMod) {
     var mods, mod, res = '', i;
     if (parentBase !== base) {
       if (parentBase)
@@ -164,7 +155,7 @@ var BH = function () {
       for (i in mods) {
         mod = mods[i];
         if (mod || mod === 0) {
-          res += (nobase ? ' _' : ' ' + base + '_') + i + (mod === true ? '' : '_' + mod);
+          res += ' ' + (nobase ? delimMod : base + delimMod) + i + (mod === true ? '' : delimMod + mod);
         }
       }
     }
